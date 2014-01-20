@@ -1,0 +1,38 @@
+body{
+	margin:0;
+	text-align:center;
+}
+
+#main_box{
+	margin:0 auto;
+	padding:0;
+	width:400px;
+	height:500px;
+	
+	background:#808080;
+}
+
+.input_text{
+	margin:0px 25px 0px 25px;
+	font-family:arial;
+	float:left;
+	font-weight:bold;
+}
+
+.input_field{
+	margin:10px auto;
+	padding:0;
+	width:350px;
+	height:30px;
+	
+	line-height:30px;
+	border:none;
+	
+	display:inline-block;
+}
+
+h1{
+	font-family:arial;
+	text-transform:uppercase;
+	letter-spacing:-1px;
+}
