@@ -4,11 +4,13 @@ require_once('secture.php');
 
 class redirect{
 
-	global $secture;
+	
+
+	//global $secture;
 	
 	function __construct(){
 		
-		if(isset($_POST['login_val']){
+		if(isset($_POST['login_val'])){
 			$this->redirect_login();
 		}else if($_POST['logout_val']){
 			$this->redirect_logout();
