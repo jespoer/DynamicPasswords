@@ -12,6 +12,26 @@ body{
 	background:#808080;
 }
 
+#popup_box{
+	visibility:hidden;
+	position:absolute;
+	background:red;
+	border:2px solid #3c3c3c;
+	z-index:100;
+	width:300px;
+	height:150px;
+	padding:15px;
+}
+
+.dimmer{
+	background:#000000;
+	position:absolute;
+	opacity:0.7;
+	top:0;
+	z-index:99;
+
+}
+
 .input_text{
 	margin:0px 25px 0px 25px;
 	font-family:arial;
@@ -29,6 +49,21 @@ body{
 	border:none;
 	
 	display:inline-block;
+}
+
+.button{
+	margin-left:25px;
+	margin-top:10px;
+	border:none;
+	width:80px;
+	height:35px;
+	line-height:35px;
+	text-decoration:none;
+	float:left;
+	background:#eeeeee;
+	
+	display:inline-block;
+
 }
 
 h1{
