@@ -149,7 +149,7 @@ class Secture{
 					}else if(preg_match("/EOF/", $this->input_array[$this->input_array_index])){	
 						$state = 0;
 						$run = false;
-						$this->accept();
+						$this->accept(0);
 						break;
 					}else{
 						$this->shift($this->input_array[$this->input_array_index]);
@@ -205,7 +205,7 @@ class Secture{
 					if(preg_match("/EOF/", $this->input_array[$this->input_array_index])){
 						$state = 0;
 						$run = false;
-						$this->accept();
+						$this->accept(4);
 						break;
 					}else if(preg_match("/\[/", $this->input_array[$this->input_array_index])){
 						if(!$this->reduce(1)){
@@ -255,40 +255,37 @@ class Secture{
 		return $this->grammar;	
 	}
 	
+	/* -- SHIFT -- */
 	private function shift($n){
 		array_push($this->stack, $n);
 		$this->input_array_index += 1; 
 	}
 	
+	/* -- REDUCE -- */
 	private function reduce($identifier){
 		if($identifier == 1){
 			while(end($this->stack) != "SOF"){
 				$res = array_pop($this->stack); 
+				$this->expression[] = $res;
 				
 			}
 		
 			array_push($this->grammar, "STRING");
 		}else{
-			while(end($this->stack) != '['){
+			while(end($this->stack) != "SOF"){
 				$res = array_pop($this->stack);
 				$this->expression[] = $res;
-				if($res == "SOF"){
-					return 0;
-				}
 			}
 				array_push($this->grammar, "EXP");
 		}
 		return 1;
 	}
-	
-	private function accept(){
-		if(count($this->stack) != 2){
+	/* -- ACCEPT -- */
+	private function accept($state){
+		if($state == 4){
 			$this->reduce(1);
 		}
-		
-		for($i = (count($this->expression));$i>=0; $i--){
-			echo $this->expression[$i];
-		}
+		print_r(array_reverse($this->expression));	
 	}
 }
 

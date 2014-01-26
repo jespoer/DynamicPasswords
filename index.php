@@ -30,9 +30,8 @@
 	
 	<?php
 		$sect = new Secture();
-		$s = $sect->LRParser("[D+2+4*3*H]");
+		$s = $sect->LRParser("asd[D+2+4*3*H]");
 		print_r($s);
-	
 	?>
 
 </body>
