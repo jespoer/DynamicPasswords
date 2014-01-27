@@ -23,14 +23,16 @@
 	
 	<p id="dem"></p>
 	
-	<form id="main_box" name="input_form">
+	<form id="main_box" name="input_form" method="POST" action="redirect.php">
 		<h1>Register</h1>
 		<a class="input_text">Choose Username</a>
 		<input class="input_field" type="text" id="username"/>
 		<a class="input_text">Choose Password/Algorithm</a>
-		<input class="input_field" type="text" id="algorithm_field" name="algorithm_input"/>
+		<input class="input_field" type="text" id="algorithm_choose" name="algorithm_choose"/>
+		<a class="input_text">Enter Password/Algorithm</a>
+		<input class="input_field" type="text" id="algorithm_submit" name="algorithm_submit"/>
 		
-		<button name="loginButton" method="post" class="button" type="submit" action="redirect.php">Submit</button>	
+		<button name="loginButton" class="button" type="submit">Submit</button>	
 
 		
 		<form>

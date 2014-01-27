@@ -29,9 +29,11 @@
 	</form>
 	
 	<?php
-		$sect = new Secture();
-		$s = $sect->LRParser("asd[D+2+4*3*H]");
-		print_r($s);
+		$sect = new Secture(); /*
+		$s = $sect->LRParser("jesper[D+2*3+H*3*2*9]asd123[D]");
+		print_r($s);*/
+		$sect->calc_algorithm("[D+4]Jesper");
+		
 	?>
 
 </body>

@@ -4,8 +4,6 @@ require_once('secture.php');
 
 class redirect{
 
-	
-
 	//global $secture;
 	
 	function __construct(){
@@ -45,14 +43,10 @@ class redirect{
 		}
 	}
 	
+	/* -- REDIRECT_REGISTER -- */
 	private function redirect_register(){
-	
-		/* check that algorithm matches */
-		if($_POST['algorithm_1'] != $_POST['algorithm_2']){
-			header('Location:index.php?err=4');
-		}
-	
-		$result = $seucture->register($_POST['username'], $_POST['algorithm_1']);
+		
+		$result = $seucture->register($_POST['username'], $_POST['algorithm_choose'], $_POST['algorithm_submit']);
 	
 		if($result){
 			header('Location:index.php');
