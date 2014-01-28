@@ -20,7 +20,7 @@ class Secture{
 	private $strings = array();
 
 	function __construct(){
-	//	$this->db_connection = new Connection();
+		$this->db_connection = new Connection();
 	}
 
 	/* -- LOGIN -- */
@@ -52,23 +52,28 @@ class Secture{
 		}
 		
 		/* check that username is available */
-		if($this->db_connection->num_rows() != 0){
+		if($this->db_connection->num_rows(TBL_USR, "name", array("name"), array($username)) != 0){
 			return 0;
 		}
 		
 		/* get number of users for user id */
-		$num_users = $this->db_connection->num_rows(); 
-		
-		/* add user as row in database */
-		if($this->db_connection->insert_row()!= 1){
+		if(($num_users = $this->db_connection->num_rows(TBL_USR, "id", array(), array())) == -1){
 			return 0;
 		}
+		
+		/* add user as row in database */
+		if($this->db_connection->insert_row(TBL_USR, array("name", "algorithm", "id", "date"), array($username, $algorithm, ($num_users+1), date("Y:n:d")))!= 1){
+			return 0;
+		}
+		
+		return 1;
 	}
 	
 	/*
 	* PRIVATE FUNCTIONS
 	*/
 	
+	/* -- CALC_ALGORITHM -- */
 	public function calc_algorithm($algorithm){
 		
 		$result = "";

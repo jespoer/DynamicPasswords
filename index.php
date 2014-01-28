@@ -2,7 +2,6 @@
 
 <?php 
 	include_once('redirect.php');
-	include_once('secture.php');
 ?>
 
 <html>
@@ -32,7 +31,7 @@
 		$sect = new Secture(); /*
 		$s = $sect->LRParser("jesper[D+2*3+H*3*2*9]asd123[D]");
 		print_r($s);*/
-		$sect->calc_algorithm("[D+4]Jesper");
+		//$sect->calc_algorithm("[D+4]Jesper");
 		
 	?>
 

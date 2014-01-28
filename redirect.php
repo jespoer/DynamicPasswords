@@ -1,13 +1,16 @@
 <?php
 
-require_once('secture.php');
+include_once('secture.php');
 
-class redirect{
 
-	//global $secture;
+class Redirect{
+	
+	private $secture;
 	
 	function __construct(){
-		
+	
+		$this->secture = new Secture();
+
 		if(isset($_POST['login_val'])){
 			$this->redirect_login();
 		}else if($_POST['logout_val']){
@@ -16,14 +19,14 @@ class redirect{
 			$this->redirect_register();
 		}else{
 			/* should not get here */
-			header('Location:index.php?err=1');
+			header('Location:index.php');
 		}
 	}
 	
 	/* -- REDIRECT_LOGIN -- */
 	private function redirect_login(){
 		
-		$result = $secture->login($_POST['username'], $_POST['password']);
+		$result = $this->secture->login($_POST['username'], $_POST['password']);
 		
 		if($result==1){
 			header('Location:index.php?content=profile');
@@ -34,7 +37,7 @@ class redirect{
 	
 	/* -- REDIRECT_LOGIN -- */
 	private function redirect_logout(){
-		$result = $secture->logout();
+		$result = $this->secture->logout();
 		
 		if($result){
 			header('Location:index.php');
@@ -46,16 +49,16 @@ class redirect{
 	/* -- REDIRECT_REGISTER -- */
 	private function redirect_register(){
 		
-		$result = $seucture->register($_POST['username'], $_POST['algorithm_choose'], $_POST['algorithm_submit']);
+		$result = $this->secture->register($_POST['username'], $_POST['algorithm_choose'], $_POST['algorithm_submit']);
 	
 		if($result){
 			header('Location:index.php');
 		}else{
 			header('Location:index.php?err=5');
 		}
-	
 	}
-
 }
+
+$red = new Redirect();
 
 ?>

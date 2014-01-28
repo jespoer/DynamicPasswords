@@ -2,14 +2,13 @@
 
 <?php 
 	include_once('redirect.php');
+	
 ?>
 
 <script type="text/javascript">
 	function addMinute(){
 	
-		//var field = document.getElementById("algorithm_field").;
 	
-		document.getElementById("dem").innerHTML = "aa";
 	}
 
 </script>
@@ -35,14 +34,7 @@
 		<button name="loginButton" class="button" type="submit">Submit</button>	
 
 		
-		<form>
-			<button onClick="addMinute()" class="button">Minute</button>
-			<button onClick="addHour" class="button">Hour</button>
-			<button onClick="addDay" class="button">Day</button>
-			<button onClick="addMonth" class="button">Month</button>
-		</form>
-		
-		<input type="hidden" name="register_val" value="1">
+		<input type="hidden" id="register_val" name="register_val" value="1">
 	</form>
 	
 
