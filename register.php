@@ -1,18 +1,5 @@
 <!DOCTYPE html>
 
-<?php 
-	include_once('redirect.php');
-	
-?>
-
-<script type="text/javascript">
-	function addMinute(){
-	
-	
-	}
-
-</script>
-
 <html>
 <head>
 	<title>Secture - Register</title>
@@ -22,10 +9,10 @@
 	
 	<p id="dem"></p>
 	
-	<form id="main_box" name="input_form" method="POST" action="redirect.php">
+	<form class="main_box" name="input_form" method="POST" action="redirect.php">
 		<h1>Register</h1>
 		<a class="input_text">Choose Username</a>
-		<input class="input_field" type="text" id="username"/>
+		<input class="input_field" type="text" name="username" id="username"/>
 		<a class="input_text">Choose Password/Algorithm</a>
 		<input class="input_field" type="text" id="algorithm_choose" name="algorithm_choose"/>
 		<a class="input_text">Enter Password/Algorithm</a>

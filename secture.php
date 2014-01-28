@@ -26,15 +26,19 @@ class Secture{
 	/* -- LOGIN -- */
 	public function login($username, $password){
 		
-		/* check input parameters */
-		if($username == NULL || $password == NULL){
+		$result_array = $this->db_connection->get_value(TBL_USR, array('algorithm'), array('name'), array($username), NULL, NULL);
+		
+		if($result_array == -1 || $result_array == null){
 			return 0;
-		} 
+		}
 		
-		$result_array = array();
+		$password_fetch = $this->calc_algorithm($result_array[0]['algorithm']);
 		
-		$result_array = $this->db_connection->get_value();
-		
+		if($password_fetch != $password){
+			return 0;
+		}else{
+			return 1;
+		}
 	}
 	
 	/* -- LOGOUT -- */
@@ -52,7 +56,7 @@ class Secture{
 		}
 		
 		/* check that username is available */
-		if($this->db_connection->num_rows(TBL_USR, "name", array("name"), array($username)) != 0){
+		if($this->db_connection->num_rows(TBL_USR, "id", array("name"), array($username)) != 0){
 			return 0;
 		}
 		
@@ -62,7 +66,7 @@ class Secture{
 		}
 		
 		/* add user as row in database */
-		if($this->db_connection->insert_row(TBL_USR, array("name", "algorithm", "id", "date"), array($username, $algorithm, ($num_users+1), date("Y:n:d")))!= 1){
+		if($this->db_connection->insert_row(TBL_USR, array("date", "algorithm", "id", "name"), array(date("Y:n:d"), $algorithm, ($num_users+1), $username ))!= 1){
 			return 0;
 		}
 		
@@ -92,6 +96,11 @@ class Secture{
 				$exp = $this->expressions[$j];
 				$exp = preg_replace("/[\[\]]/","", $exp);
 				$exp = preg_replace("/D/",date("j"), $exp); 
+				$exp = preg_replace("/M/", date("n"), $exp);
+				$exp = preg_replace("/Y/", date("y"), $exp);
+				
+				$exp = preg_replace("/H/", date("G"), $exp);
+				$exp = preg_replace("/I/", date("i"), $exp);
 				
 				$exp = preg_replace("/[\+\*]/"," ", $exp); 
 				
@@ -109,7 +118,7 @@ class Secture{
 			}
 		}
 		
-		echo $result;
+		return $result;
 	}
 	
 	

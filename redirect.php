@@ -26,7 +26,7 @@ class Redirect{
 	/* -- REDIRECT_LOGIN -- */
 	private function redirect_login(){
 		
-		$result = $this->secture->login($_POST['username'], $_POST['password']);
+		$result = $this->secture->login($_POST['username'], $_POST['algorithm_input']);
 		
 		if($result==1){
 			header('Location:index.php?content=profile');
@@ -50,7 +50,7 @@ class Redirect{
 	private function redirect_register(){
 		
 		$result = $this->secture->register($_POST['username'], $_POST['algorithm_choose'], $_POST['algorithm_submit']);
-	
+		
 		if($result){
 			header('Location:index.php');
 		}else{
@@ -59,6 +59,6 @@ class Redirect{
 	}
 }
 
-$red = new Redirect();
+$red = new Redirect;
 
 ?>
