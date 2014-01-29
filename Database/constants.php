@@ -12,6 +12,6 @@ define("DB_USER", "root");
 define("DB_PASSWORD", "");  
 define("DB_NAME", "ny_db"); 
 
-define("TBL_USR", "ivar_tbl");
+define("TBL_USR", "user_tbl");
 
 ?>

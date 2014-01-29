@@ -25,6 +25,10 @@ class Secture{
 
 	/* -- LOGIN -- */
 	public function login($username, $password){
+	
+		if($username == null || $password == null){
+			return 0;
+		}
 		
 		$result_array = $this->db_connection->get_value(TBL_USR, array('algorithm'), array('name'), array($username), NULL, NULL);
 		
@@ -48,6 +52,11 @@ class Secture{
 	
 	/* -- REGISTER --*/
 	public function register($username, $algorithm, $password){
+	
+		/* check if input is invalid */
+		if($username == null || $algorithm == null || $password == null){
+			return 0;
+		}
 	
 		$alg_pw = $this->calc_algorithm($algorithm);
 		
@@ -120,64 +129,8 @@ class Secture{
 		
 		return $result;
 	}
-	
-	
-	
-	/* -- LEX_ANALYSIS -- */
-	public function lex_and_parse($string){
-	
-		$token_array = array(); /* initiate token array */
-	
-		/* remove whitespaces */
-		$string = preg_replace("/\s\s*/", "", $string);
-		
-		/* split string into an array of characters */
-		$char_array = str_split($string); 
-		
-		for($i=0;$i<count($char_array);$i++){
-			
-			/* left paranthesis */
-			if(preg_match("/\[/", $char_array[$i])){
-				$token_array[] = "ALGLEFT";
-			/* right parenthesis */
-			}else if(preg_match("/\]/", $char_array[$i])){
-				$token_array[] = "ALGRIGHT";	
-			/* plus match */
-			}else if(preg_match("/\+/", $char_array[$i])){
-				$token_array[] = "PLUS";		
-			/* mul match */
-			}else if(preg_match("/\*/", $char_array[$i])){
-				$token_array[] = "MUL";
-			/* integer match */
-			}else if(preg_match("/[0-9]/", $char_array[$i])){
-				
-				while(preg_match("/[0-9]/", $char_array[$i])){
-					$i++;
-				}
-				if(!preg_match("/[a-zA-Z\.\,\-\_\?\!\(\)\#\&\%]/", $char_array[$i])){
-					$token_array[] = "INT";
-				} 
-				$i--;
-			/* string match */
-			}else if(preg_match("/[a-zA-Z\.\,\-\_\?\!\(\)\#\&\%]/", $char_array[$i])){
-				
-				while(preg_match("/[a-zA-Z0-9\.\,\-\_\?\!\(\)\#\&\%]/", $char_array[$i])){
-					$i++;
-					
-					if($i==count($char_array)){
-						break;
-					}
-				}
-				$token_array[] = "STRING";
-				$i--;
-			}else{
-				/* Given String is not valid */
-				return false;
-			}	
-		}
-		return $token_array;
-	}
-	
+
+	/* -- LRPARSER -- */
 	public function LRParser($string){
 	
 		$this->stack = array();

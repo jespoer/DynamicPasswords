@@ -31,7 +31,7 @@ class Redirect{
 		if($result==1){
 			header('Location:index.php?content=profile');
 		}else{
-			header('Location:index.php?err=2');
+			header('Location:index.php?err=1');
 		}
 	}
 	
@@ -42,19 +42,20 @@ class Redirect{
 		if($result){
 			header('Location:index.php');
 		}else{
-			header('Location:index.php?err=3');
+			header('Location:index.php?err=2');
 		}
 	}
 	
 	/* -- REDIRECT_REGISTER -- */
 	private function redirect_register(){
 		
+		
 		$result = $this->secture->register($_POST['username'], $_POST['algorithm_choose'], $_POST['algorithm_submit']);
 		
 		if($result){
 			header('Location:index.php');
 		}else{
-			header('Location:index.php?err=5');
+			header('Location:register.php?err=3');
 		}
 	}
 }
