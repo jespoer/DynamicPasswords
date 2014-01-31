@@ -1,26 +1,27 @@
 <?php
 
 include_once('Database/database.php');
+include_once('parser.php');
 
 class Secture{
 
 	private $db_connection;
-	
-	private $state;
+	private $parser;
 	
 	private $stack;
-	private $stack_index;
 	
 	private $input_array;
 	private $input_array_index; 
 	
 	private $grammar = array();
-	private $expressions = array();
-	
-	private $strings = array();
+	private $expressions;
+	private $strings;
 
 	function __construct(){
+		session_start();
+	
 		$this->db_connection = new Connection();
+		$this->parser = new LR_Parser();
 	}
 
 	/* -- LOGIN -- */
@@ -41,13 +42,43 @@ class Secture{
 		if($password_fetch != $password){
 			return 0;
 		}else{
+			/* store username, session_id and given password in a session array */
+			$_SESSION['user_array'] = array($username, $password);
 			return 1;
 		}
 	}
 	
+	/* -- IS_ONLINE -- */
+	public function is_online(){
+		
+		/* check if session array is set and has valid values */
+		if(!isset($_SESSION['user_array']) || $_SESSION['user_array'][0] == null ||  $_SESSION['user_array'][1] == null){
+			return 0;
+		}
+		
+		$pw = $this->db_connection->get_value(TBL_USR, array('algorithm'), array('name'), array($_SESSION['user_array'][0]), NULL, NULL);
+		
+		if($pw == -1 || $pw == null || $pw == 0){
+			return 0;
+		}
+		
+		if($this->calc_algorithm($pw[0]['algorithm']) == $this->calc_algorithm($_SESSION['user_array'][1])){
+			return 1;
+		}
+	
+		return $this->calc_algorithm($pw[0]['algorithm']);
+	}
+	
 	/* -- LOGOUT -- */
 	public function logout(){
-	
+		session_unset();
+		session_destroy();	
+
+		if($this->is_online){
+			return 0;
+		}else{ 
+			return 1;
+		}
 	}
 	
 	/* -- REGISTER --*/
@@ -87,22 +118,23 @@ class Secture{
 	*/
 	
 	/* -- CALC_ALGORITHM -- */
-	public function calc_algorithm($algorithm){
+	private function calc_algorithm($algorithm){
 		
 		$result = "";
-		$i = 0;	/* string index */
-		$j = 0; /* exp index */
+		$i = 0;	/* array index */
 	
-		$grammar = $this->LRParser($algorithm);
+		$algorithm_array = $this->parser->parse($algorithm);
 		
-		foreach($grammar as $token){
+		$source_algorithm = $algorithm_array[1];
+		
+		foreach($algorithm_array[0] as $token){
 			if($token == "STRING"){
 				/* string given */
-				$result = $result.$this->strings[$i];
+				$result = $result.$source_algorithm[$i];
 				$i++;
 			}else if($token == "EXP"){
 				/* expression given */
-				$exp = $this->expressions[$j];
+				$exp = $source_algorithm[$i];
 				$exp = preg_replace("/[\[\]]/","", $exp);
 				$exp = preg_replace("/D/",date("j"), $exp); 
 				$exp = preg_replace("/M/", date("n"), $exp);
@@ -111,16 +143,10 @@ class Secture{
 				$exp = preg_replace("/H/", date("G"), $exp);
 				$exp = preg_replace("/I/", date("i"), $exp);
 				
-				$exp = preg_replace("/[\+\*]/"," ", $exp); 
-				
-				$exp = explode(" ", $exp);
-				$resultt = 0;
-				foreach($exp as $value){
-					$resultt += intval($value);
-				}
+				$resultt = $this->arithmetic_calc($exp);
 				
 				$result = $result.$resultt;
-				$j++;
+				$i++;
 			}else{
 				/* should not get here, return error */
 				return 0;
@@ -129,152 +155,11 @@ class Secture{
 		
 		return $result;
 	}
-
-	/* -- LRPARSER -- */
-	public function LRParser($string){
 	
-		$this->stack = array();
-		
-		array_push($this->stack, "SOF");
-	
-		$this->stack_index = 0;
-		$this->input_array_index = 0;
-	
-		/* remove whitespaces */
-		$string = preg_replace("/\s\s*/", "", $string); 
-		
-		/* remove other invalid characters */
-		$string = $string;
-		
-		$this->input_array = str_split($string);
-		
-		array_push($this->input_array, "EOF");
-		
-		$run = true;
-		$this->state = 0;
-		
-		while($run){
-			switch($this->state){
-				case 0:
-					if(preg_match("/\[/", $this->input_array[$this->input_array_index])){
-						$this->shift(1);
-					}else if(preg_match("/EOF/", $this->input_array[$this->input_array_index])){	
-						$this->state = 0;
-						$run = false;
-						$this->accept(0);
-						break;
-					}else{
-						$this->shift(4);
-					}
-					break;
-				case 1:
-					if(preg_match("/[0-9]/", $this->input_array[$this->input_array_index])){
-						$this->shift(2);
-					}else if(preg_match("/[DMYHI]/", $this->input_array[$this->input_array_index])){
-						$this->shift(3);
-					}else{
-						$this->shift(4);
-					}
-					break;
-				case 2:
-					if(preg_match("/[0-9]/", $this->input_array[$this->input_array_index])){
-						$this->shift(2);
-					}else if(preg_match("/[\+\*]/", $this->input_array[$this->input_array_index])){
-						$this->shift(6);
-					}else if(preg_match("/\]/", $this->input_array[$this->input_array_index])){
-						$this->shift(0);
-						$this->reduce(2);
-					}else{
-						$this->shift(4);
-					}
-					break;
-				case 3:
-					if(preg_match("/[\+\*]/", $this->input_array[$this->input_array_index])){
-						$this->shift(6);
-					}else if(preg_match("/\]/", $this->input_array[$this->input_array_index])){
-						$this->shift(0);
-						$this->reduce(2);
-					}else{
-						$this->shift(4);
-					}
-					break;
-				case 4:
-					if(preg_match("/EOF/", $this->input_array[$this->input_array_index])){
-						$this->state = 0;
-						$run = false;
-						$this->accept(4);
-						break;
-					}else if(preg_match("/\[/", $this->input_array[$this->input_array_index])){
-						$this->reduce(1);
-						$this->shift(1);
-					}else if(preg_match("/[a-zA-Z0-9\.\]\,\-\+\*\_\?\!\(\)\#\&\%]/", $this->input_array[$this->input_array_index])){
-						$this->shift(4);
-					}else{
-						$this->shift(0);
-						$this->reduce(1);
-					}
-					break;
-				case 5:
-					break;
-				case 6:
-					if(preg_match("/[0-9]/", $this->input_array[$this->input_array_index])){
-						$this->shift(2);
-					}else if(preg_match("/[DMYHI]/", $this->input_array[$this->input_array_index])){
-						$this->shift(3);
-					}else if(preg_match("/\]/", $this->input_array[$this->input_array_index])){
-						$this->shift(0);
-						$this->reduce(2);
-					}else{
-						$this->shift(4);
-					}
-					break;
-				default:
-			}
-		}
-		echo "<br> Expressions:";
-		print_r($this->expressions);
-		echo "<br> Strings:";
-		print_r($this->strings);
-		
-		/* return grammar */
-		return $this->grammar;	
-	}
-	
-	/* -- SHIFT -- */
-	private function shift($next_state){
-		$this->stack[] = $this->input_array[$this->input_array_index];
-		$this->input_array_index += 1; 
-		$this->state = $next_state;
-	}
-	
-	/* -- REDUCE -- */
-	private function reduce($identifier){
-	
-		/* array used when poping stack */
-		$tmp_array = array();
-		
-		if($identifier == 1){
-			while(end($this->stack) != "SOF"){
-				$res = array_pop($this->stack); 
-				$tmp_array[] = $res;
-			}
-			$this->strings[] = implode(array_reverse($tmp_array));
-			$this->grammar[] = "STRING";
-		}else{
-			while(end($this->stack) != "SOF"){
-				$res = array_pop($this->stack);
-				$tmp_array[] = $res;
-			}
-				$this->expressions[] = implode(array_reverse($tmp_array));
-				$this->grammar[] = "EXP";
-		}
-	}
-	/* -- ACCEPT -- */
-	private function accept($state){
-		if($state == 4){
-			$this->reduce(1);
-		}
-			
+	/* -- ARITHMETIC_CALC -- */
+	public function arithmetic_calc($string){
+		$string = "return ".$string.";";	
+		return eval($string);
 	}
 }
 

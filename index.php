@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 
+<?php
+
+include_once('secture.php');
+
+?>
+
 <html>
 <head>
 	<title>Secture - Dynamic passwords</title>
@@ -8,11 +14,15 @@
 <body>
 
 	<?php 
-		if(isset($_GET['content']) && $_GET['content'] == 'profile'){
+	
+		$session = new Secture();
+	
+		if(isset($_GET['content']) && $_GET['content'] == 'profile' && $session->is_online() == 1){
 		
 		echo '
 		<div class="main_box">
 			<h1>profile</h1>
+			<p>Hi '.$_SESSION['user_array'][0].'!
 		</div>
 		';
 		
