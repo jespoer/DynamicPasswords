@@ -1,5 +1,11 @@
 <?php
 
+/*	Copyright 2014 Jesper Westerberg
+*	-- Parser -- 
+*	@Author : Jesper Westerberg
+*	@Version : 1.0
+*/
+
 class LR_Parser{
 
 	private $grammar;
@@ -61,7 +67,7 @@ class LR_Parser{
 				case 2:
 					if(preg_match("/[0-9]/", $this->input_array[$this->input_array_index])){
 						$this->shift(2);
-					}else if(preg_match("/[\+\*]/", $this->input_array[$this->input_array_index])){
+					}else if(preg_match("/[\+\*\-]/", $this->input_array[$this->input_array_index])){
 						$this->shift(6);
 					}else if(preg_match("/\]/", $this->input_array[$this->input_array_index])){
 						$this->shift(0);
@@ -71,7 +77,7 @@ class LR_Parser{
 					}
 					break;
 				case 3:
-					if(preg_match("/[\+\*]/", $this->input_array[$this->input_array_index])){
+					if(preg_match("/[\+\*\-]/", $this->input_array[$this->input_array_index])){
 						$this->shift(6);
 					}else if(preg_match("/\]/", $this->input_array[$this->input_array_index])){
 						$this->shift(0);

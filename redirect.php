@@ -1,7 +1,12 @@
 <?php
 
-include_once('secture.php');
+/*	Copyright 2014 Jesper Westerberg
+*	-- Secture -- 
+*	@Author : Jesper Westerberg
+*	@Version : 1.0
+*/
 
+include_once('secture.php');
 
 class Redirect{
 	

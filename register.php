@@ -11,9 +11,9 @@
 		<h1>Register</h1>
 		<a class="input_text">Choose Username</a>
 		<input class="input_field" type="text" name="username" id="username"/>
-		<a class="input_text">Choose Password/Algorithm</a>
+		<a class="input_text">Choose Password/Algorithm: (Eg [D+1]hi )</a>
 		<input class="input_field" type="text" id="algorithm_choose" name="algorithm_choose"/>
-		<a class="input_text">Enter Complete Password</a>
+		<a class="input_text">Enter Complete Password: (Would be "32hi" the 31th)</a>
 		<input class="input_field" type="text" id="algorithm_submit" name="algorithm_submit"/>
 		
 		<button name="loginButton" class="button" type="submit">Submit</button>

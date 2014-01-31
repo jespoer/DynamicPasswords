@@ -1,5 +1,11 @@
 <?php
 
+/*	Copyright 2014 Jesper Westerberg
+*	-- Secture -- 
+*	@Author : Jesper Westerberg
+*	@Version : 1.0
+*/
+
 include_once('Database/database.php');
 include_once('parser.php');
 
@@ -145,6 +151,10 @@ class Secture{
 				
 				$resultt = $this->arithmetic_calc($exp);
 				
+				if($resultt == null){
+					return 0;
+				}
+				
 				$result = $result.$resultt;
 				$i++;
 			}else{
@@ -152,14 +162,17 @@ class Secture{
 				return 0;
 			}
 		}
-		
 		return $result;
 	}
 	
-	/* -- ARITHMETIC_CALC -- */
-	public function arithmetic_calc($string){
-		$string = "return ".$string.";";	
-		return eval($string);
+	/* -- ARITHMETIC_CALC -- this needs to be changed to a different solution */
+	private function arithmetic_calc($string){
+		if(preg_match("/[return0-9\+\*\;\-]+/", $string)){
+			$string = "return ".$string.";";	
+			return eval($string);
+		}else{
+			return null;
+		}	
 	}
 }
 

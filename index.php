@@ -20,10 +20,12 @@ include_once('secture.php');
 		if(isset($_GET['content']) && $_GET['content'] == 'profile' && $session->is_online() == 1){
 		
 		echo '
-		<div class="main_box">
+		<form class="main_box" method="POST" action="redirect.php">
 			<h1>profile</h1>
 			<p>Hi '.$_SESSION['user_array'][0].'!
-		</div>
+			<input type="hidden" name="logout_val" value="1">
+			<button name="logoutButton" class="button" type="submit" >Logout</button>
+		</form>
 		';
 		
 		}else{
