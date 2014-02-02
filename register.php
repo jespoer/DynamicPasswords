@@ -15,8 +15,9 @@
 		<input class="input_field" type="text" id="algorithm_choose" name="algorithm_choose"/>
 		<a class="input_text">Enter Complete Password: (Would be "32hi" the 31th)</a>
 		<input class="input_field" type="text" id="algorithm_submit" name="algorithm_submit"/>
-		
+
 		<button name="loginButton" class="button" type="submit">Submit</button>
+		
 
 		<?php
 			if(isset($_GET['err']) && $_GET['err'] == 3){
@@ -52,15 +53,11 @@
 		<br>
 		<br>
 		Valid arithmetic operations in the brackets are at this moment + and * but more will soon be added.
-		
-		
 	</div>
 	
-	<footer>
-		<a class="foot_txt">&#169 Copyright - Jespoer</a>
-	</footer>
-
-	
+	<?php
+		include('Page_parts/footer.php');
+	?>
 
 
 </body>
